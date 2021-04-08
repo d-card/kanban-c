@@ -1,9 +1,9 @@
-void AddTask();
-void ListTasks();
-void AdvanceTime();
 void SanitizeString(char *string);
 char SanitizeArgument(char *string);
+void AddTask();
+void ListTasks();
 void ListAllTasks();
+void AdvanceTime();
 void AddUser();
 void MoveTask();
 void ListTasksinActivity();
