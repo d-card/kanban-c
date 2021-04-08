@@ -22,6 +22,7 @@ int time = START_TIME;
 int totalTasks = 0;
 int totalUsers = 0;
 int totalActivities = 3;
+int taskOrder[MAX_TASKS] = {0}; /*tracks order of tasks*/
 Task allTasks[MAX_TASKS];
 
 int main()
@@ -97,7 +98,7 @@ void SanitizeString(char *string)
 void AddTask()
 {
     Task newTask;
-    int i;
+    int i, first, last, middle;
 
     scanf("%d", &newTask.expectedDuration);
     SanitizeString(newTask.description);
@@ -119,9 +120,32 @@ void AddTask()
     }
 
     allTasks[totalTasks] = newTask;
-    allTasks[totalTasks].id = totalTasks;
+    allTasks[totalTasks].id = totalTasks + 1;
     strcpy(allTasks[totalTasks].activity, TO_DO);
     allTasks[totalTasks].startTime = 0;
+
+    if (totalTasks == 0)
+        taskOrder[0] = 1;
+    else
+    {
+        first = 0;                   /*first index*/
+        last = totalTasks - 1;       /*last index*/
+        middle = (first + last) / 2; /*middle index*/
+        while (first < last)
+        {
+            if (strcmp(allTasks[taskOrder[middle] - 1].description, newTask.description) < 0)
+                first = middle + 1;
+            else
+                last = middle - 1;
+            middle = (first + last) / 2;
+        }
+        if (strcmp(allTasks[taskOrder[first] - 1].description, newTask.description) < 0)
+            ++first;
+        for (i = totalTasks; i > first; --i)
+            taskOrder[i] = taskOrder[i - 1];
+        taskOrder[first] = totalTasks + 1;
+    }
+
     ++totalTasks;
     printf("%s %d\n", TASK, totalTasks);
 }
@@ -155,30 +179,13 @@ void ListTasks()
 
 void ListAllTasks()
 {
-    int idOrder[MAX_TASKS];
-    int i, j, temp2;
-    for (i = 0; i < totalTasks; ++i)
-        idOrder[i] = i + 1;
-
-    for (i = 0; i < totalTasks; ++i)
-    {
-        for (j = i + 1; j < totalTasks; ++j)
-        {
-            if (strcmp(allTasks[idOrder[i] - 1].description, allTasks[idOrder[j] - 1].description) > 0)
-            {
-                temp2 = idOrder[i];
-                idOrder[i] = idOrder[j];
-                idOrder[j] = temp2;
-            }
-        }
-    }
-
+    int i;
     for (i = 0; i < totalTasks; ++i)
         printf("%d %s #%d %s\n",
-               idOrder[i],
-               allTasks[idOrder[i] - 1].activity,
-               allTasks[idOrder[i] - 1].expectedDuration,
-               allTasks[idOrder[i] - 1].description);
+               taskOrder[i],
+               allTasks[taskOrder[i] - 1].activity,
+               allTasks[taskOrder[i] - 1].expectedDuration,
+               allTasks[taskOrder[i] - 1].description);
 }
 
 void AdvanceTime()
@@ -304,9 +311,9 @@ void ListTasksinActivity()
     }
     for (i = 0; i < totalTasks; ++i)
     {
-        if (strcmp(allTasks[i].activity, activity) == 0)
+        if (strcmp(allTasks[taskOrder[i] - 1].activity, activity) == 0)
         {
-            idOrder[j++] = i + 1;
+            idOrder[j++] = taskOrder[i];
             ++count;
         }
     }
