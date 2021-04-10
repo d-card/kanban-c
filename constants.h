@@ -1,8 +1,15 @@
+/*
+ * File:  constants.h
+ * Author:  Diogo Cardoso 99209
+ * Description: File where all constants are defined.
+*/
+
 #define MAX_DSCPRT_LENGTH 50 + 1
 #define MAX_USER_LENGTH 20 + 1
 #define MAX_ACTV_LENGTH 20 + 1
 #define START_TIME 0
 #define MAX_TASKS 10000
+#define MAX_TASKS_STRING_SIZE 5 + 1 /*size of MAX_TASKS number*/
 #define MAX_USERS 50
 #define MAX_ACTIVITIES 10
 
