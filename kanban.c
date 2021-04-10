@@ -110,7 +110,7 @@ void SanitizeString(char *string)
 void AddTask()
 {
     Task newTask;
-    int i, first, last, middle;
+    int i, index;
 
     scanf("%d", &newTask.expectedDuration);
     SanitizeString(newTask.description);
@@ -130,15 +130,25 @@ void AddTask()
         printf(DURATION_ERROR);
         return;
     }
-
     allTasks[totalTasks] = newTask;
     allTasks[totalTasks].id = totalTasks + 1;
     strcpy(allTasks[totalTasks].activity, TO_DO);
     allTasks[totalTasks].startTime = 0;
-
     /* use binary search to put the task in the correct place of the taskOrder vector */
+    index = BinarySearch(newTask.description); /* index where task should be moved to*/
+    for (i = totalTasks; i > index; --i)       /* moves appropriate tasks 1 index higher */
+        taskOrder[i] = taskOrder[i - 1];
+    taskOrder[index] = totalTasks + 1;
+    ++totalTasks;
+    printf("%s %d\n", TASK, totalTasks);
+}
+
+int BinarySearch(char *description)
+{
+    int first, middle, last;
+
     if (totalTasks == 0)
-        taskOrder[0] = 1;
+        return 0;
     else
     {
         first = 0;
@@ -146,22 +156,17 @@ void AddTask()
         middle = (first + last) / 2;
         while (first < last) /* when first == last, task should either be in that index or 1 higher */
         {
-            if (strcmp(allTasks[taskOrder[middle] - 1].description, newTask.description) < 0)
+            if (strcmp(allTasks[taskOrder[middle] - 1].description, description) < 0)
                 first = middle + 1;
             else
                 last = middle - 1;
             middle = (first + last) / 2;
         }
         /* check where task should be put (same index or 1 higher) */
-        if (strcmp(allTasks[taskOrder[first] - 1].description, newTask.description) < 0)
-            ++first;                         /* first is now the index where the task should be */
-        for (i = totalTasks; i > first; --i) /* moves appropriate tasks 1 index higher */
-            taskOrder[i] = taskOrder[i - 1];
-        taskOrder[first] = totalTasks + 1;
+        if (strcmp(allTasks[taskOrder[first] - 1].description, description) < 0)
+            return first + 1; /* first is now the index where the task should be */
+        return first;
     }
-
-    ++totalTasks;
-    printf("%s %d\n", TASK, totalTasks);
 }
 
 /* ran when "l" command is invoked. lists all tasks or specified tasks */

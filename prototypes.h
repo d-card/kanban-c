@@ -7,6 +7,7 @@
 void SanitizeString(char *string);
 char SanitizeArgument(char *string);
 void AddTask();
+int BinarySearch(char *description);
 void ListTasks();
 void ListAllTasks();
 void AdvanceTime();

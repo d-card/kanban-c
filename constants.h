@@ -26,7 +26,6 @@
 #define NO_ACTIVITY_ERROR "no such activity\n"
 #define NO_USER_ERROR "no such user\n"
 #define TASK_STARTED_ERROR "task already started\n"
-
 #define TO_DO "TO DO"
 #define IN_PROGRESS "IN PROGRESS"
 #define DONE "DONE"
