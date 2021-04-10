@@ -30,7 +30,7 @@ int time = START_TIME;                                                         /
 int totalTasks = 0;                                                            /* tracks total number of tasks */
 int totalUsers = 0;                                                            /* tracks total number of users */
 int totalActivities = 3;                                                       /* tracks total number of activities */
-int taskOrder[MAX_TASKS] = {0};                                                /*tracks alphabetical order of tasks' descriptions*/
+int taskOrder[MAX_TASKS];                                                      /*tracks alphabetical order of tasks' descriptions*/
 Task allTasks[MAX_TASKS];                                                      /*tracks all tasks*/
 
 /* reads command letter and runs appropriate function */
