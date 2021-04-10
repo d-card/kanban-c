@@ -109,7 +109,7 @@ void SanitizeString(char *string)
 void AddTask()
 {
     Task newTask;
-    int i, index;
+    int i;
 
     scanf("%d", &newTask.expectedDuration);
     SanitizeString(newTask.description);
@@ -136,23 +136,19 @@ void AddTask()
     allTasks[totalTasks].startTime = 0;
     strcpy(allTasks[totalTasks].activity, TO_DO);
 
-    /* use binary search to put the task in the correct place of the taskOrder vector */
-    index = BinarySearch(newTask.description); /* index where task should be moved to*/
-    for (i = totalTasks; i > index; --i)       /* moves appropriate tasks 1 index higher */
-        taskOrder[i] = taskOrder[i - 1];
-    taskOrder[index] = totalTasks + 1;
+    OrderNewTask(newTask.description);
 
     ++totalTasks;
     printf("%s %d\n", TASK, totalTasks);
 }
 
-/* auxiliar function of AddTask(). performs binary search and returns the index where task should be placed*/
-int BinarySearch(char *description)
+/* auxiliar function of AddTask(). performs binary search and inserts newTask into correct place in allTasks vector*/
+void OrderNewTask(char *description)
 {
-    int first, middle, last;
-
+    int i, first, middle, last, index;
+    /* binary search */
     if (totalTasks == 0)
-        return 0;
+        index = 0;
     else
     {
         first = 0;
@@ -166,11 +162,17 @@ int BinarySearch(char *description)
                 last = middle - 1;
             middle = (first + last) / 2;
         }
+
         /* check where task should be put (same index or 1 higher) */
+        index = first;
         if (strcmp(allTasks[taskOrder[first] - 1].description, description) < 0)
-            return first + 1; /* first is now the index where the task should be */
-        return first;
+            index += 1;
     }
+
+    /* moves appropriate tasks 1 index higher */
+    for (i = totalTasks; i > index; --i)
+        taskOrder[i] = taskOrder[i - 1];
+    taskOrder[index] = totalTasks + 1; /* places new task in correct index */
 }
 
 /* ran when "l" command is invoked. lists all tasks or specified tasks */
