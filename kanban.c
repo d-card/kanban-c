@@ -74,7 +74,6 @@ int main()
 
 /* reads 1 argument from input, saves what it reads into string and returns the last character read */
 char SanitizeArgument(char *string)
-
 {
     int c, i = 0, flag = 0; /* flags whether a character other than space/tab has been read */
 
@@ -130,19 +129,24 @@ void AddTask()
         printf(DURATION_ERROR);
         return;
     }
+
+    /* update task struct*/
     allTasks[totalTasks] = newTask;
     allTasks[totalTasks].id = totalTasks + 1;
-    strcpy(allTasks[totalTasks].activity, TO_DO);
     allTasks[totalTasks].startTime = 0;
+    strcpy(allTasks[totalTasks].activity, TO_DO);
+
     /* use binary search to put the task in the correct place of the taskOrder vector */
     index = BinarySearch(newTask.description); /* index where task should be moved to*/
     for (i = totalTasks; i > index; --i)       /* moves appropriate tasks 1 index higher */
         taskOrder[i] = taskOrder[i - 1];
     taskOrder[index] = totalTasks + 1;
+
     ++totalTasks;
     printf("%s %d\n", TASK, totalTasks);
 }
 
+/* auxiliar function of AddTask(). performs binary search and returns the index where task should be placed*/
 int BinarySearch(char *description)
 {
     int first, middle, last;
@@ -226,6 +230,7 @@ void AdvanceTime()
         printf("%d\n", time);
         return;
     }
+
     time += timeAdded;
     printf("%d\n", time);
 }
@@ -237,6 +242,7 @@ void AddUser()
     int i;
 
     SanitizeArgument(user);
+
     if (user[0] == '\0') /* check if command has no arguments */
     {
         for (i = 0; i < totalUsers; ++i)
@@ -254,6 +260,7 @@ void AddUser()
             printf(USER_EXISTS_ERROR);
             return;
         }
+
     strcpy(users[totalUsers], user);
     ++totalUsers;
 }
@@ -267,6 +274,7 @@ void MoveTask()
     scanf("%d", &id);
     SanitizeArgument(user);
     SanitizeString(activity);
+
     if (id > totalTasks || id < 1)
     {
         printf(NO_TASK_ERROR);
@@ -275,36 +283,27 @@ void MoveTask()
     if (strcmp(activity, TO_DO) == 0)
     {
         if (strcmp(allTasks[id - 1].activity, TO_DO) == 0)
-            return;                 /*if moving from TO DO to TO DO do nothing*/
-        printf(TASK_STARTED_ERROR); /*else raise error*/
+            return; /*if moving from TO DO to TO DO do nothing*/
+        printf(TASK_STARTED_ERROR);
         return;
     }
     for (i = 0; i < totalUsers; ++i)
-    {
         if (strcmp(user, users[i]) == 0)
-        {
             user_exists = 1;
-            break;
-        }
-    }
     if (user_exists == 0)
     {
         printf(NO_USER_ERROR);
         return;
     }
     for (i = 0; i < totalActivities; ++i)
-    {
         if (strcmp(activity, activities[i]) == 0)
-        {
             activity_exists = 1;
-            break;
-        }
-    }
     if (activity_exists == 0)
     {
         printf(NO_ACTIVITY_ERROR);
         return;
     }
+
     if (strcmp(allTasks[id - 1].activity, TO_DO) == 0) /*if task is being moved from TO DO set start time*/
         allTasks[id - 1].startTime = time;
     if (strcmp(activity, DONE) == 0) /*if task is being moved to DONE print required info*/
@@ -317,6 +316,8 @@ void MoveTask()
                SLACK,
                (time - allTasks[id - 1].startTime) - allTasks[id - 1].expectedDuration);
     }
+
+    /* update task struct */
     strcpy(allTasks[id - 1].activity, activity);
     strcpy(allTasks[id - 1].user, user);
 }
@@ -328,32 +329,27 @@ void ListTasksinActivity()
     int i, j, temp, idOrder[MAX_TASKS], count = 0, activity_exists = 0;
 
     SanitizeString(activity);
+
     for (i = 0; i < totalActivities; ++i)
-    {
         if (strcmp(activity, activities[i]) == 0)
-        {
             activity_exists = 1;
-            break;
-        }
-    }
     if (activity_exists == 0)
     {
         printf(NO_ACTIVITY_ERROR);
         return;
     }
+
     j = 0;
     /*copy id of tasks in activity to idOrder vector and count number of tasks*/
     for (i = 0; i < totalTasks; ++i)
-    {
         if (strcmp(allTasks[taskOrder[i] - 1].activity, activity) == 0)
         {
             idOrder[j++] = taskOrder[i];
             ++count;
         }
-    }
+
     /*sort tasks by startTime*/
     for (i = 0; i < count; ++i)
-    {
         for (j = i + 1; j < count; ++j)
         {
             if (allTasks[idOrder[i] - 1].startTime > allTasks[idOrder[j] - 1].startTime)
@@ -372,7 +368,6 @@ void ListTasksinActivity()
                 idOrder[j] = temp;
             }
         }
-    }
 
     for (i = 0; i < count; ++i)
         printf("%d %d %s\n",
@@ -388,6 +383,7 @@ void AddActivity()
     int i;
 
     SanitizeString(activity);
+
     if (activity[0] == '\0') /* check if command has no arguments */
     {
         for (i = 0; i < totalActivities; ++i)
@@ -400,13 +396,11 @@ void AddActivity()
         return;
     }
     for (i = 0; i < totalActivities; ++i)
-    {
         if (strcmp(activity, activities[i]) == 0)
         {
             printf(ACTIVITY_EXISTS_ERROR);
             return;
         }
-    }
     /* check if activity has lower-case letters */
     for (i = 0; i < (int)strlen(activity); ++i)
     {
@@ -418,6 +412,7 @@ void AddActivity()
             return;
         }
     }
+
     strcpy(activities[totalActivities], activity);
     ++totalActivities;
 }
