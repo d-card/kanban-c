@@ -62,9 +62,8 @@ int main(){
 char SanitizeArgument(char *string){
     int c, i = 0, flag = 0; /* flags whether a character other than space/tab has been read */
 
-    /* copy everything between blank characters */
-    while ((c = getchar()) != '\n' && (c != ' ' || flag == 0)){
-        if (c != ' ' && c != '\t')
+    while ((c = getchar()) != '\n' && (!isspace(c) || flag == 0)){
+        if (!isspace(c))
             flag = 1;
         if (flag == 1)
             string[i++] = c;
@@ -77,9 +76,8 @@ char SanitizeArgument(char *string){
 void SanitizeString(char *string){
     int c, i = 0, flag = 0; /* flags whether a character other than space/tab has been read */
 
-    /* copy everything starting at non-space/tab character until end of command*/
     while ((c = getchar()) != '\n'){
-        if (c != ' ' && c != '\t')
+        if (!isspace(c))
             flag = 1;
         if (flag == 1)
             string[i++] = c;
@@ -133,6 +131,7 @@ int CheckAddTaskErrors(Task task){
 /* auxiliar function of AddTask(). performs binary search and inserts newTask into correct place in allTasks vector*/
 void OrderNewTask(char *description){
     int i, first, middle, last, index;
+    
     /* binary search */
     if (totalTasks == 0)
         index = 0;
