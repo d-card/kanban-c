@@ -1,10 +1,3 @@
-/*
- * File:  kanban.c
- * Author:  Diogo Cardoso 99209
- * Description: A program which recreates the Kanban scheduling system. 
- * Main file where all functions are defined.
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>

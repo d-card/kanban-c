@@ -1,9 +1,3 @@
-/*
- * File:  prototypes.h
- * Author:  Diogo Cardoso 99209
- * Description: File where all functions' prototypes + Task struct are declared.
-*/
-
 typedef struct{
     int id;
     int expectedDuration;

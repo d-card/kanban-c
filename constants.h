@@ -1,9 +1,3 @@
-/*
- * File:  constants.h
- * Author:  Diogo Cardoso 99209
- * Description: File where all constants are defined.
-*/
-
 #define MAX_DSCPRT_LENGTH 50 + 1
 #define MAX_USER_LENGTH 20 + 1
 #define MAX_ACTV_LENGTH 20 + 1
