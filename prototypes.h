@@ -5,7 +5,6 @@ typedef struct{
     char description[MAX_DSCPRT_LENGTH];
     char user[MAX_USER_LENGTH];
     char activity[MAX_ACTV_LENGTH];
-
 } Task;
 
 void SanitizeString(char *string);
